@@ -1,7 +1,26 @@
 const db = require("../data/db-config");
 
+function add(schemeData) {
+  return db("schemes")
+    .insert(schemeData)
+    .then(id => {
+      return findById(id[0]);
+    });
+}
+
+function addStep(data, id) {
+  const stepData = { scheme_id: id, ...data };
+
+  return db("steps")
+    .insert(stepData)
+    .then(id => ({
+      ...stepData,
+      id: id[0]
+    }));
+}
+
 function find() {
-  return db("schemes").select();
+  return db("schemes");
 }
 
 function findById(id) {
@@ -10,19 +29,8 @@ function findById(id) {
     .first();
 }
 
-async function add(data) {
-  const [id] = await db("schemes").insert(data);
-  return db("schemes")
-    .where({ id })
-    .first();
-}
-
-async function update(id, body) {
-  await db("schemes")
-    .where({ id })
-    .update(body);
-
-  return findById(id);
+function findSteps(id) {
+  return db("steps");
 }
 
 function remove(id) {
@@ -31,10 +39,25 @@ function remove(id) {
     .del();
 }
 
+function update(changes, id) {
+  return db("schemes")
+    .where({ id })
+    .update(changes)
+    .then(id => {
+      if (id > 0) {
+        findById(id);
+      } else {
+        return null;
+      }
+    });
+}
+
 module.exports = {
+  add,
+  addStep,
   find,
   findById,
-  add,
-  update,
-  remove
+  findSteps,
+  remove,
+  update
 };

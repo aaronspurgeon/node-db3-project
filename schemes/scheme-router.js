@@ -5,7 +5,7 @@ const stepsRouter = require("../steps/steps-router");
 
 const router = express.Router();
 
-router.use("/:id/steps", stepsRouter);
+// router.use("/:id/steps", stepsRouter);
 
 router.get("/", (req, res) => {
   Schemes.find()

@@ -1,6 +1,6 @@
 const db = require("../data/db-config");
 
-function find(steps_id) {
+function findSteps(steps_id) {
   return db("steps as s")
     .join("schemes as sch", "sch.id", "s.steps_id")
     .where({ steps_id })
@@ -8,5 +8,5 @@ function find(steps_id) {
 }
 
 module.exports = {
-  find
+  findSteps
 };
